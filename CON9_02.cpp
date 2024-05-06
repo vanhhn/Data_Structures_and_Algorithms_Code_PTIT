@@ -1,57 +1,27 @@
-#include <bits/stdc++.h>
-
+#include<bits/stdc++.h>
 using namespace std;
+#define ll long long
+#define mod 1000000007
 
-typedef long long ll;
-typedef unsigned long long ull;
-typedef long double ld;
-typedef pair<int, int> p;
-typedef vector<vector<int> > vt;
-typedef vector<pair<int, int> > vp;
-
-const ll mod = 1e9 + 7;
-const int oo = 1e6 + 7;
-
-#define f first
-#define s second
-#define pb push_back
-#define ep emplace_back
-#define sz(a) (int) a.size()
-#define ms(s, n) memset(s, n, sizeof(s))
-#define present(t, x) (t.find(x) != t.end())
-#define all(a) (a.begin(), a.end())
-#define For(i, l, r) for (int i = l; i <= r; i++)
-#define Fod(i, r, l) for (int i = r; i >= l; i--)
-#define fillchar(a, x) memset(a, x, sizeof (a))
-#define faster ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-
-void FileIO(){
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-}
-
-
-
-vector<pair<int, int> > v;
-int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    v.clear();
-    int n; cin >> n;
-    cin.ignore();
-    for(int i = 1; i <= n; i++){
-        string s, num;
-        getline(cin, s);
-        stringstream ss(s);
-        while(ss >> num){
-            if(stoi(num) > i)
-                v.push_back({i, stoi(num)});
+int main()
+{
+   int n;
+   cin>>n;
+   vector<pair<int,int>>v;
+   int x;
+   char c;
+   for(int i=1;i<=n;i++){
+    while(scanf("%d%c",&x,&c)!=EOF){
+        if(x>i){
+        v.push_back({i,x});
+        }
+        if(c=='\n'){
+            break;
         }
     }
-    for(auto x: v)
-        cout << x.f << " " << x.second << endl;
-    
+   }
+   for(auto it:v){
+    cout<<it.first<<" "<<it.second<<endl;
+   }
     return 0;
 }
