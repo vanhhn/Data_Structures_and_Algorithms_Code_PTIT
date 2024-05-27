@@ -1,43 +1,30 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define ll long long 
+#define ll long long
 #define mod 1000000007
-struct matrix {
-	ll f[2][2];
-};
-matrix nhan(matrix a,matrix b){
-	matrix c;
-	for(int i=0;i<2;i++){
-		for(int j=0;j<2;j++){
-			c.f[i][j]=0;
-			for(int k=0;k<2;k++){
-				c.f[i][j]+=(a.f[i][k]*b.f[k][j])%mod;
-				c.f[i][j]%=mod;
-			}
-		}
-	}
-	return c;
+typedef struct{
+    int h;
+		int p;
+		int s;
+}TG;
+int cmp(const void* a,const void* b){
+	TG *x=(TG*)a;
+	TG *y=(TG*)b;
+	int x1=x->h*3600+x->p*60+x->s;
+  int y1=y->h*3600+y->p*60+y->s;
+	return x1-y1;
 }
-matrix power(matrix a,int n){
-	if(n==1) return a;
-	matrix res=power(a,n/2);
-	if(n%2==0){
-		return nhan(res,res);
-	}
-	else{
-		return nhan(a,nhan(res,res));
-	}
-}
-int main(){
-	int t;
-	cin>>t;
-	while(t--){
+int main()
+{
 		int n;
 		cin>>n;
-		matrix a;
-		a.f[0][0]=a.f[0][1]=a.f[1][0]=1;
-		a.f[1][1]=0;
-		matrix res=power(a,n+1);
-		cout<<res.f[1][1]<<"\n";
-	}
+		TG a[n];
+		for(int i=0;i<n;i++){
+			cin>>a[i].h>>a[i].p>>a[i].s;
+		}
+    qsort(a,n,sizeof(a[0]),cmp);
+		for(int i=0;i<n;i++){
+			cout<<a[i].h<<" "<<a[i].p<<" "<<a[i].s<<"\n";
+		}
+		return 0;
 }
