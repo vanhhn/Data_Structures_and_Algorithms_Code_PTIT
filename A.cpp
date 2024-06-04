@@ -1,63 +1,71 @@
-#include <bits/stdc++.h>
-using namespace std;
-
- int dx[8]={-2,-1,1,2,2,1,-1,-2};
- int dy[8]={-1,-2,-2,-1,1,2,2,1};
- const int INF = 1e9;
-int bfs_knight(vector<vector<int>> &grid, int x1, int y1, int x2, int y2)
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <stdlib.h>
+typedef struct
 {
-  int N = grid.size();
-  vector<vector<int>> dist(N, vector<int>(N, INF));
-  queue<pair<int, int>> q;
-
-  q.push({x1, y1});
-  dist[x1][y1] = grid[x1][y1];
-
-  while (!q.empty())
-  {
-    auto [x, y] = q.front();
-    q.pop();
-
-    for (int k = 0; k < 8; k++)
-    {
-      int nx = x + dx[k], ny = y + dy[k];
-      if (nx >= 0 && nx < N && ny >= 0 && ny < N)
-      {
-        int new_dist = dist[x][y] + grid[nx][ny];
-        if (new_dist < dist[nx][ny])
-        {
-          dist[nx][ny] = new_dist;
-          q.push({nx, ny});
-        }
-      }
-    }
+  char hl[20];
+  int id;
+  float diemtb;
+  char name[100];
+} SV;
+int cmp(const void *a, const void *b)
+{
+  SV *x = (SV *)a;
+  SV *y = (SV *)b;
+  if (fabs(x->diemtb - y->diemtb) < 1e-6) {
+    return x->id - y->id;
   }
-
-  return (dist[x2][y2] == INF) ? -1 : dist[x2][y2];
+  return (x->diemtb < y->diemtb) ? 1 : -1;
 }
 int main()
 {
-  int t;
-  cin >> t;
-  while (t--)
+  int n;
+  scanf("%d", &n);
+  float d[10];
+  SV a[n];
+  char c[100];
+  for (int i = 0; i < n; i++)
   {
-    int N;
-    cin >> N;
-    vector<vector<int>> grid(N, vector<int>(N));
-    for (int i = 0; i < N; ++i)
+    scanf("\n");
+    fgets(c, 100, stdin);
+    c[strlen(c) - 1] = '\0';
+    strcpy(a[i].name, c);
+    a[i].id = i + 1;
+    float sum = 0;
+    for (int j = 0; j < 10; j++)
     {
-      for (int j = 0; j < N; ++j)
-      {
-        cin >> grid[i][j];
-      }
+      scanf("%f", &d[j]);
+      sum += d[j];
     }
-    int x1, y1, x2, y2;
-    cin >> x1 >> y1 >> x2 >> y2;
-    x1--;
-    y1--;
-    x2--;
-    y2--; // Convert to 0-based index
-
-    cout << bfs_knight(grid, x1, y1, x2, y2) << "\n";
+    a[i].diemtb = sum / 10;
+    if (a[i].diemtb >= 9)
+    {
+      strcpy(a[i].hl, "XUAT SAC");
+    }
+    else if (a[i].diemtb >= 8)
+    {
+      strcpy(a[i].hl, "GIOI");
+    }
+    else if (a[i].diemtb >= 7)
+    {
+      strcpy(a[i].hl, "KHA");
+    }
+    else if (a[i].diemtb >= 5)
+    {
+      strcpy(a[i].hl, "TB");
+    }
+    else
+    {
+      strcpy(a[i].hl, "YEU");
+    }
   }
+  qsort(a, n, sizeof(a[0]), cmp);
+  for (int i = 0; i < n; i++)
+  {
+    printf("HS0%d %s %.1f %s\n", a[i].id, a[i].name, a[i].diemtb, a[i].hl);
+  }
+
+  return 0;
 }

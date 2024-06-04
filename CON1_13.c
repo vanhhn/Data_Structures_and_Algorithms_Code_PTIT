@@ -63,7 +63,9 @@ void next(){
   }
 }
 int main(){
-
+     int t;
+     scanf("%d",&t);
+     while(t--){
     init();
     while(ok){
       if(check()){
@@ -75,5 +77,6 @@ int main(){
     for(int i=0;i<id;i++){
       printf("%s\n",ans[i].s);
     }
+     }
    return 0;
 }
