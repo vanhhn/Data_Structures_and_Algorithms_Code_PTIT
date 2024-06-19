@@ -1,64 +1,63 @@
-#include <bits/stdc++.h>
-#define endl "\n"
+
+#include<bits/stdc++.h>
+
 using namespace std;
+
+#define mp make_pair
+#define fi first
+#define se second
+#define pb push_back
+#define sz size()
+#define ll long long
+#define FOR(i, a, b) for(int i = a; i <= b; i++)
+#define FORD(i, a, b) for(int i = a; i >= b; i--)
+#define F(i, a, b) for(int i = a; i < b; ++i)
+#define FD(i, a, b) for(int i = a; i > b; --i)
+#define faster() ios_base::sync_with_stdio(0); cin.tie(NULL);cout.tie(NULL);
+#define vi vector<int>
+#define vll vector<ll>
+#define all(x) (x).begin(), (x).end()
+#define endl '\n'
+
+inline string calc(string s)
+{
+    stack<char> st1, st2;
+    s = '+' + s;
+    st2.push('+');
+    for(char &i : s)
+    {
+        if(isalpha(i)) st1.push(i);
+        else
+        {
+            if(i == '+' or i == '-')
+            {
+                if(st2.top() == '+') st1.push(i);
+                else st1.push((i == '+') ? '-' : '+');
+            }
+            if(i == '(') st2.push(st1.top());
+            else if(i == ')') st2.pop();
+        }
+    }
+    string res = "";
+    while(st1.sz > 1)
+    {
+        res = st1.top() + res;
+        st1.pop();
+    }
+    return res;
+    
+}
+
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+    faster();
     int t;
     cin >> t;
-    while (t--)
+    string s1;
+    while(t--)
     {
-        string s, k, ans = "";
-        cin >> s;
-        char c, d;
-        stack<char> st, ld;
-        for (int i = 0; i < s.size(); i++)
-        {
-            if (s[i] == '(')
-            {
-                st.push(s[i]);
-                ld.push(s[i - 1]);
-            }
-            else if (s[i] == ')')
-            {
-                k = "";
-                while (st.size())
-                {
-                    c = st.top();
-                    st.pop();
-                    d = st.top();
-                    st.pop();
-                    if (ld.top() == '-')
-                    {
-                        k = c + k;
-                        if (d == '-')
-                            k = '+' + k;
-                        else
-                            k = '-' + k;
-                    }
-                    else
-                    {
-                        k = c + k;
-                        k = d + k;
-                    }
-                    if (d == '(')
-                    {
-                        for (int j = 1; j < k.size(); j++)
-                            st.push(k[j]);
-                        break;
-                    }
-                }
-                ld.pop();
-            }
-            else
-                st.push(s[i]);
-        }
-        while (st.size())
-        {
-            ans = st.top() + ans;
-            st.pop();
-        }
-        cout << ans << endl;
+        cin >> s1;
+        cout<<calc(s1)<<"\n";
     }
+    return 0;
 }

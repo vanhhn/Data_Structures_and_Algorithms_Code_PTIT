@@ -1,31 +1,43 @@
 #include <bits/stdc++.h>
-#define endl "\n"
+
 using namespace std;
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        int l[n], maz = 0;
-        vector<pair<int, int>> a(n);
-        for (int i = 0; i < n; i++)
-            cin >> a[i].first >> a[i].second;
-        sort(a.begin(), a.end());
-        for (int i = 0; i < n; i++)
-        {
-            l[i] = 1;
-            for (int j = 0; j < i; j++)
-            {
-                if (a[i].first > a[j].second && l[i] <= l[j])
-                    l[i] = l[j] + 1;
-            }
-            maz = max(maz, l[i]);
+
+typedef long long ll;
+
+const ll mod = 1e9 + 7;
+
+void FileIO(){
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+}
+
+bool cmp(pair<int, int> a, pair<int, int> b){
+    return a.first < b.first;
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int t; cin >> t;
+    while(t--){
+        int n; cin >> n;
+        vector<pair<int, int> > v;
+        for(int i = 0; i < n; i ++){
+            int x, y; cin >> x >> y;
+            v.push_back({x, y});
         }
-        cout << maz << endl;
+        sort(v.begin(), v.end(), cmp);
+        vector<int> b(n + 1, 1);
+        int res = 1;
+        for(int i = 1; i < n; i ++){
+            for(int j = 0; j < i; j ++)
+                if(v[j].second < v[i].first) 
+                    b[i] = max(b[i], b[j] + 1);
+            res = max(res, b[i]);
+        }
+        cout << res << endl;
     }
+    return 0;
 }

@@ -1,71 +1,107 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <stack>
+#include <string>
+#include <cctype>  // for isdigit function
+#include <sstream> // for istringstream
+
 using namespace std;
-#define ll long long
-#define mod 1000000007
-int pre(char c){
-  if(c=='(') return 0;
-  else if(c=='+'||c=='-') return 1;
-  else if(c=='*'||c=='/') return 2;
+
+// Hàm trả về độ ưu tiên của toán tử
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
 }
-ll tinhToan(ll a,ll b,char c){
-  if(c=='+') return a+b;
-  else if(c=='-') return a-b;
-  else if(c=='*') return a*b;
-  return a/b;
+
+// Hàm thực hiện phép toán giữa hai toán hạng
+int applyOperation(int a, int b, char op, bool &divideByZero) {
+    switch (op) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': 
+            if (b == 0) {
+                divideByZero = true;
+                return 0;
+            }
+            return a / b;
+    }
+    return 0;
 }
-void solve(string s){
-  stack<char>st1;
-  stack<ll>st2;
-  for(int i=0;i<s.size();i++){
-    if(s[i]=='('){
-      st1.push(s[i]);
-    }
-    else if(isdigit(s[i])){
-      ll tmp=0;
-      while(i<s.size()&&isdigit(s[i])){
-        tmp=tmp*10+s[i]-'0';
-        i++;
-      }
-      st2.push(tmp);
-      i--;
-    }
-    else if(s[i]==')'){
-      while(!st1.empty()&&st1.top()!='('){
-        ll o1=st2.top();st2.pop();
-        ll o2=st2.top();st2.pop();
-        st2.push(tinhToan(o2,o1,st1.top()));
-        st1.pop();
-      }
-      st1.pop();
-    }
-    else{
-      while(!st1.empty()&&pre(st1.top())>=pre(s[i])){
-         ll o1=st2.top();st2.pop();
-        ll o2=st2.top();st2.pop();
-        st2.push(tinhToan(o2,o1,st1.top()));
-        st1.pop();
-      }
-      st1.push(s[i]);
+
+// Hàm đánh giá biểu thức trung tố
+int evaluateInfix(const string &expression, bool &divideByZero) {
+    stack<int> values; // ngăn xếp để lưu trữ các toán hạng
+    stack<char> ops; // ngăn xếp để lưu trữ các toán tử
+
+    for (int i = 0; i < expression.length(); i++) {
+        if (expression[i] == ' ') continue; // bỏ qua khoảng trắng
+
+        // Nếu ký tự là dấu ngoặc mở
+        if (expression[i] == '(') {
+            ops.push(expression[i]);
+        }
+        // Nếu ký tự là số
+        else if (isdigit(expression[i])) {
+            int val = 0;
+            while (i < expression.length() && isdigit(expression[i])) {
+                val = (val * 10) + (expression[i] - '0');
+                i++;
+            }
+            values.push(val);
+            i--; // giảm i vì vòng lặp for cũng tăng i
+        }
+        // Nếu ký tự là dấu ngoặc đóng
+        else if (expression[i] == ')') {
+            while (!ops.empty() && ops.top() != '(') {
+                int val2 = values.top(); values.pop();
+                int val1 = values.top(); values.pop();
+                char op = ops.top(); ops.pop();
+                values.push(applyOperation(val1, val2, op, divideByZero));
+                if (divideByZero) return 0;
+            }
+            ops.pop(); // loại bỏ dấu ngoặc mở
+        }
+        // Nếu ký tự là toán tử
+        else {
+            while (!ops.empty() && precedence(ops.top()) >= precedence(expression[i])) {
+                int val2 = values.top(); values.pop();
+                int val1 = values.top(); values.pop();
+                char op = ops.top(); ops.pop();
+                values.push(applyOperation(val1, val2, op, divideByZero));
+                if (divideByZero) return 0;
+            }
+            ops.push(expression[i]);
+        }
     }
 
-  }
-  while(!st1.empty()){
-     ll o1=st2.top();st2.pop();
-        ll o2=st2.top();st2.pop();
-        st2.push(tinhToan(o2,o1,st1.top()));
-        st1.pop();
-  }
-  cout<<st2.top()<<"\n";
+    // Hoàn thành các phép toán còn lại trong ngăn xếp
+    while (!ops.empty()) {
+        int val2 = values.top(); values.pop();
+        int val1 = values.top(); values.pop();
+        char op = ops.top(); ops.pop();
+        values.push(applyOperation(val1, val2, op, divideByZero));
+        if (divideByZero) return 0;
+    }
+
+    return values.top();
 }
-int main()
-{
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        string s;
-        cin>>s;
-        solve(s);
+
+int main() {
+int T;
+    cin >> T;
+    cin.ignore();  // Bỏ qua ký tự newline sau số lượng bộ test
+
+    for (int i = 0; i < T; ++i) {
+        string expression;
+        getline(cin, expression);
+        bool divideByZero = false;
+        int result = evaluateInfix(expression, divideByZero);
+        if (divideByZero) {
+            cout << "0" << endl;
+        } else {
+            cout << result << endl;
+        }
     }
     return 0;
 }

@@ -1,61 +1,36 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-
-typedef long long ll;
-
-bool check(vector<int> &A)
-{
-  int N = A.size();
-  int total = accumulate(A.begin(), A.end(), 0);
-  int target = total / 2;
-
-  bitset<100001> dp;
-  dp[0] = 1; // Có thể đạt được tổng 0
-
-  for (int num : A)
-  {
-    dp |= dp << num;
+int n;
+int a[105];
+int sum;
+void init(){
+  cin>>n;
+  sum=0;
+  for(int i=0;i<n;i++){
+     cin>>a[i];
+     sum+=a[i];
   }
-
-  int best = 0;
-  for (int i = target; i >= 0; --i)
-  {
-    if (dp[i])
-    {
-      best = i;
-      break;
-    }
-  }
-
-  ll sum1 = best;
-  ll sum2 = total - best;
-  return sum1 == sum2;
 }
-
-int main()
-{
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-  cout.tie(NULL);
-
+int main(){
   int t;
-  cin >> t;
-  while (t--)
-  {
-    int n;
-    cin >> n;
-    vector<int> A(n);
-    for (int i = 0; i < n; ++i)
-    {
-      cin >> A[i];
+  cin>>t;
+  while(t--){
+    init();
+    if(sum%2==1){
+      cout<<"NO\n";
     }
-    if (check(A))
-    {
-      cout << "YES\n";
-    }
-    else
-    {
-      cout << "NO\n";
+    else{
+      sum/=2;
+      vector<int> dp(sum+1,0);
+      dp[0]=1;
+      for(int i=0;i<n;i++){
+        for(int j=sum;j>=a[i];j--){
+          if(dp[j-a[i]]){
+            dp[j]=1;
+          }
+        }
+      }
+      cout<<(dp[sum]?"YES\n":"NO\n");
     }
   }
   return 0;

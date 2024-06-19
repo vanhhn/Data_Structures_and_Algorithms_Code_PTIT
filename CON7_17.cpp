@@ -14,7 +14,13 @@ void sovle(string s){
       int res;
       if(s[i]=='+') res=o1+o2;
       else if(s[i]=='-')res=o1-o2;
-      else if(s[i]=='/') res=o1/o2;
+      else if(s[i]=='/'){
+        if(o2==0){
+          cout<<0<<'\n';
+          return ;
+        }
+        res=o1/o2;
+      }
       else res=o1*o2;
       st.push(res);
     }
