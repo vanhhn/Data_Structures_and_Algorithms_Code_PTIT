@@ -1,28 +1,32 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define ll long long
 #define mod 1000000007
-#define inf -1000000009
-int n,k,dp[1005][55];
-int main(){
-  int t;
-  cin>>t;
-  while(t--){
-    cin>>n>>k;
-    int a[n+1];
-    for(int i=1;i<=n;i++){
-      cin>>a[i];
-      a[i]%=k;
+ll len[93];
+void init(){
+    len[1]=len[2]=1;
+    for(int i=3;i<93;i++){
+        len[i]=len[i-2]+len[i-1];
     }
-    for(int i=1;i<=k-1;i++){
-      dp[1][i]=inf;
+}
+char find(ll n,ll k){
+    if(n==1) return 'A';
+    if(n==2) return 'B';
+    if(k>len[n-2]){
+        return find(n-1,k-len[n-2]);
     }
-    dp[1][a[1]]=1;
-    for(int i=2;i<=n;i++){
-      for(int j=0;j<=k-1;j++){
-        dp[i][j]=max(dp[i-1][j],dp[i-1][(j-a[i]+k)%k]+1);
-      }
+    return find(n-2,k);
+}
+int main()
+{    
+    init();
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll n,k;
+        cin>>n>>k;
+        cout<<find(n,k)<<"\n";
     }
-    cout<<dp[n][0]<<"\n";
-  }
-  return 0;
+    return 0;
 }

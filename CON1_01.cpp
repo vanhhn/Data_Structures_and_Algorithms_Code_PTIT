@@ -14,6 +14,9 @@ int main(){
     if(i>=0){
       s[i]='1';
     }
-    cout<<s<<"\n";
+    for(char c:s){
+      cout<<c<<" ";
+    }
+    cout<<'\n';
   }
 }

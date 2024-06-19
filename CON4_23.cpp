@@ -1,30 +1,21 @@
-#include <bits/stdc++.h>
-#define endl "\n"
+#include<bits/stdc++.h>
 using namespace std;
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        long long n, k;
-        cin >> n >> k;
-        long long a[n + 1];
-        for (long long i = 1; i <= n; i++)
-        {
-            a[i] = pow(2, i - 1);
-        }
-        for (int i = n; i >= 1; i--)
-        {
-            if (k == a[i])
-            {
-                cout << i << endl;
-                break;
-            }
-            else if (k > a[i])
-                k -= a[i];
-        }
+#define ll long long
+ll find(ll n,ll k){
+    ll m=pow(2,n-1);
+    if(k==m) return n;
+    if(k>m){
+      return find(n-1,2*m-k);
     }
+    return find(n-1,k);
+}
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        ll n,k;
+        cin>>n>>k;
+        cout<<find(n,k)<<"\n";
+    }
+    return 0;
 }
