@@ -2,31 +2,72 @@
 using namespace std;
 #define ll long long
 #define mod 1000000007
-ll len[93];
-void init(){
-    len[1]=len[2]=1;
-    for(int i=3;i<93;i++){
-        len[i]=len[i-2]+len[i-1];
-    }
+struct TreeNode{
+  int val;
+  TreeNode* left;
+  TreeNode* right;
+  TreeNode(int x):val(x),left(NULL),right(NULL){}
+};
+TreeNode* creatTree(vector<int>nums){
+      if(nums.size()==0){
+        return NULL;
+      }
+      TreeNode* root=new TreeNode(nums[0]);
+      queue<TreeNode*>q;
+      q.push(root);
+      int id=1;
+      while(q.size()&&id<nums.size()){
+        TreeNode* cur=q.front();
+        q.pop();
+        if(nums[id]!=-1){
+            cur->left=new TreeNode(nums[id]);
+            q.push(cur->left);
+        }
+        id++;
+        if(id<nums.size()&&nums[id]!=-1){
+            cur->right=new TreeNode(nums[id]);
+            q.push(cur->right);
+        }
+        id++;
+      }
+      return root;
 }
-char find(ll n,ll k){
-    if(n==1) return 'A';
-    if(n==2) return 'B';
-    if(k>len[n-2]){
-        return find(n-1,k-len[n-2]);
+void sovle(TreeNode* root){
+   if(!root) return;
+   queue<TreeNode*>q;
+   q.push(root);
+   while(q.size()){
+    int size=q.size();
+    for(int i=0;i<size;i++){
+    TreeNode* cur=q.front();
+    q.pop();
+    cout<<cur->val<<" ";
+    if(cur->left){
+        q.push(cur->left);
     }
-    return find(n-2,k);
+    if(cur->right){
+        q.push(cur->right);
+    }  
+   }
+   cout<<'\n';
+   }
 }
 int main()
-{    
-    init();
+{
     int t;
     cin >> t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
-        cout<<find(n,k)<<"\n";
+        int n;
+        cin>>n;
+        vector<int>nums;
+        for(int i=0;i<n;i++){
+            int x;
+            cin>>x;
+            nums.push_back(x);
+        }
+        TreeNode* root = creatTree(nums);
+        sovle(root);
     }
     return 0;
 }

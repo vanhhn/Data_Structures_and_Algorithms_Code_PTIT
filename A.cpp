@@ -1,58 +1,35 @@
 #include<bits/stdc++.h>
 using namespace std;
-// tao struct luu tree 
-struct TreeNode{
-  int val;
-  TreeNode* left;
-  TreeNode* right;
-  TreeNode(int x):val(x),left(NULL),right(NULL){}// tao contructer
-};
-// ham tim do cao cay
-int maxDepth(TreeNode* root){
-  if(root==nullptr) return 0;
-  int leftDepth=maxDepth(root->left);
-  int rightDepth=maxDepth(root->right);
-  return max(leftDepth,rightDepth)+1;
+#define ll long long
+#define mod 1000000007
+int check(string s){
+  int cnt=0;
+  for(int i=0;i<s.size()-1;i++){
+    if(s[i]=='0'&&s[i+1]=='1')
+    {
+      cnt++;
+    }
+  }
+  return cnt==2;
 }
-// ham xay dung cay tu mang node
-TreeNode* buildTree(vector<int>&nodes){
-  if(nodes.empty()){
-    return nullptr;
-  }
-  TreeNode* root=new TreeNode(nodes[0]);
-  queue<TreeNode*>q;
-  q.push(root);
-  int index=1;
-  while(index<nodes.size()){
-    TreeNode* cur=q.front();
-    q.pop();
-    if(index<nodes.size()&&nodes[index]!=-1){
-      cur->left=new TreeNode(nodes[index]);
-      q.push(cur->left);
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int n;
+        cin>>n;
+        if(n<4)cout<<-1;
+        else{
+          for(int i=0;i<(1<<n);i++){
+
+             string s=bitset<32>(i).to_string();
+             s=s.substr(32-n);
+             if(check(s))cout<<s<<" ";
+          }
+        }
+        cout<<"\n";
     }
-    index++;
-    if(index<nodes.size()&&nodes[index]!=-1){
-      cur->right=new TreeNode(nodes[index]);
-      q.push(cur->right);
-    }
-    index++;
-  }
-  return root;
-}
-int main(){
-  int t;
-  cin>>t;
-  while(t--){
-    int n;
-    cin>>n;
-    vector<int>nodes;
-    for(int i=0;i<n;i++){
-      int x;
-      cin>>x;
-      nodes.push_back(x);
-    }
-    TreeNode* root=buildTree(nodes);
-    cout<<maxDepth(root)<<"\n";
-  }
-  return 0;
+    return 0;
 }

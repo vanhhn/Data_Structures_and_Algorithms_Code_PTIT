@@ -1,40 +1,35 @@
-#include <bits/stdc++.h>
-#define endl "\n"
+#include<bits/stdc++.h>
 using namespace std;
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+int main(){
     int t;
-    cin >> t;
-    while (t--)
-    {
+    cin>>t;
+    while(t--){
         int n;
-        cin >> n;
-        pair<int, int> u, v;
-        queue<pair<int, int>> q;
-        map<int, int> m;
-        u.first = n;
-        u.second = 0;
-        q.push(u);
-        while (q.size())
-        {
-            u = q.front();
+        cin>>n;
+        queue<pair<int,int>>q;
+        q.push({n,0});
+        unordered_map<int,int>mp;
+        mp[n]=1;
+        while(q.size()){
+            auto it=q.front();
             q.pop();
-            if (u.first == 2)
-            {
-                cout << u.second + 1 << endl;
+            if(it.first==1){
+                cout<<it.second<<endl;
                 break;
             }
-            for (int i = 2; i <= sqrt(u.first); i++)
-            {
-                if (u.first % i == 0 && !m[u.first / i])
-                {
-                    m[u.first / i]++;
-                    q.push({u.first / i, u.second + 1});
+            for(int i=2;i*i<=it.first;i++){
+                if(it.first%i==0){
+                    int m=max(i,it.first/i);
+                    if(!mp[m]){
+                        q.push({m,it.second+1});
+                        mp[m]=1;
+                    }
                 }
             }
-            q.push({u.first - 1, u.second + 1});
+            if(!mp[it.first-1]){
+                q.push({it.first-1,it.second+1});
+                mp[it.first-1]=1;
+            }
         }
     }
 }
